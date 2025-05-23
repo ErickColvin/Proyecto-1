@@ -1,0 +1,17 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* === Estilo global para texto blanco === */
+:root {
+  color-scheme: dark; 
+}
+body {
+    color: white;
+    background-color: #0f172a; /* gris oscuro */
+  }
+  * {
+    color: white !important;
+  }
+  

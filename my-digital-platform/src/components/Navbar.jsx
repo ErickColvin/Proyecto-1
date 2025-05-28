@@ -12,6 +12,7 @@ const Navbar = () => {
         <NavLink to="/"        className="hover:text-blue-300">Dashboard</NavLink>
         <NavLink to="/import"  className="hover:text-blue-300">Importar Excel</NavLink>
         <NavLink to="/products" className="hover:text-blue-300">Productos</NavLink>
+        <NavLink to="/services" className="hover:text-blue-300">Servicios</NavLink>
       </div>
       <div>
         <button className="relative">

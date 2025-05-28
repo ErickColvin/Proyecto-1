@@ -6,6 +6,7 @@ import Navbar      from './components/Navbar';
 import Home        from './pages/Home';
 import ImportExcel from './pages/ImportExcel';
 import DataTable   from './pages/DataTable';
+import DataServices from './components/DataServices';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/import" element={<ImportExcel />} />
             {/* Listado de productos */}
             <Route path="/products" element={<DataTable />} />
+            <Route path="/services" element={<DataServices />} />
           </Routes>
         </main>
       </BrowserRouter>

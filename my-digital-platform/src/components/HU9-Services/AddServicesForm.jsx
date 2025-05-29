@@ -1,28 +1,39 @@
 import React, { useState } from 'react';
+import { postServ } from './postServices';
 
 const AddServiceForm = ({ onAddService, onClose }) => {
-  const [newService, setNewService] = useState({
-    serviceName: "",
-    requestId: "",
-    address: "",
-    description: "",
-    startDate: "",
-    endDate: "",
-    status: "PENDIENTE"
-  });
+  const [nameService, setNameService] = useState('');
+  const [ID, setID] = useState('');
+  const [direccion, setDireccion] = useState('');
+  const [description, setDescription] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [status, setStatus] = useState('');
+  const [tipoDeServicio, setTipoDeServicio] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+
+    
     e.preventDefault();
-    onAddService(newService);
-    onClose();
-  };
+    try {
+      const serviceData = {
+        nameService,
+        ID,
+        direccion,
+        description,
+        startDate,
+        endDate,
+        status,
+        tipoDeServicio,
+      };
+      console.log(serviceData)
+      await postServ(serviceData);
 
-  const handleChange = (e) => {
-    setNewService({
-      ...newService,
-      [e.target.name]: e.target.value
-    });
-  };
+    } catch (error) {
+      console.error('Error al agregar el servicio:', error);
+    }
+  }
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -33,9 +44,9 @@ const AddServiceForm = ({ onAddService, onClose }) => {
             <label className="block mb-1">Nombre del Servicio</label>
             <input
               type="text"
-              name="serviceName"
-              value={newService.serviceName}
-              onChange={handleChange}
+              name="nameService"
+              value={nameService}
+              onChange={(e) => setNameService(e.target.value)}
               className="w-full p-2 bg-gray-700 rounded"
               required
             />
@@ -44,9 +55,9 @@ const AddServiceForm = ({ onAddService, onClose }) => {
             <label className="block mb-1">ID de Solicitud</label>
             <input
               type="text"
-              name="requestId"
-              value={newService.requestId}
-              onChange={handleChange}
+              name="ID"
+              value={ID}
+              onChange={(e) => setID(e.target.value)}
               className="w-full p-2 bg-gray-700 rounded"
               required
             />
@@ -55,9 +66,9 @@ const AddServiceForm = ({ onAddService, onClose }) => {
             <label className="block mb-1">Dirección</label>
             <input
               type="text"
-              name="address"
-              value={newService.address}
-              onChange={handleChange}
+              name="direccion"
+              value={direccion}
+              onChange={(e) => setDireccion(e.target.value)}
               className="w-full p-2 bg-gray-700 rounded"
               required
             />
@@ -66,8 +77,8 @@ const AddServiceForm = ({ onAddService, onClose }) => {
             <label className="block mb-1">Descripción</label>
             <textarea
               name="description"
-              value={newService.description}
-              onChange={handleChange}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               className="w-full p-2 bg-gray-700 rounded"
               required
             />
@@ -77,8 +88,8 @@ const AddServiceForm = ({ onAddService, onClose }) => {
             <input
               type="date"
               name="startDate"
-              value={newService.startDate}
-              onChange={handleChange}
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
               className="w-full p-2 bg-gray-700 rounded"
               required
             />
@@ -88,8 +99,8 @@ const AddServiceForm = ({ onAddService, onClose }) => {
             <input
               type="date"
               name="endDate"
-              value={newService.endDate}
-              onChange={handleChange}
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
               className="w-full p-2 bg-gray-700 rounded"
               required
             />
@@ -98,10 +109,12 @@ const AddServiceForm = ({ onAddService, onClose }) => {
             <label className="block mb-1">Estado</label>
             <select
               name="status"
-              value={newService.status}
-              onChange={handleChange}
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
               className="w-full p-2 bg-gray-700 rounded"
+              required
             >
+              <option value="" disabled>Seleccione estado</option>
               <option value="PENDIENTE">Pendiente</option>
               <option value="EN PROGRESO">En Progreso</option>
               <option value="COMPLETADO">Completado</option>
@@ -110,9 +123,9 @@ const AddServiceForm = ({ onAddService, onClose }) => {
           <div>
             <label className="block mb-1">Tipo de Servicio</label>
             <select
-              name="serviceType"
-              value={newService.serviceType || ""}
-              onChange={handleChange}
+              name="tipoDeServicio"
+              value={tipoDeServicio}
+              onChange={(e) => setTipoDeServicio(e.target.value)}
               className="w-full p-2 bg-gray-700 rounded"
               required
             >

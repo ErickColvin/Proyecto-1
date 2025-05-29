@@ -1,14 +1,17 @@
 import React from 'react';
 
 const ServiceRow = ({ service, handleStatusClick, handleServiceTypeClick, selectedService }) => {
+  const formatDate = date =>
+    date ? new Date(date).toISOString().split('T')[0] : '';
+
   return (
     <tr className="hover:bg-gray-600">
-      <td className="border px-4 py-2">{service.serviceName}</td>
-      <td className="border px-4 py-2">{service.requestId}</td>
-      <td className="border px-4 py-2">{service.address}</td>
+      <td className="border px-4 py-2">{service.nameService}</td>
+      <td className="border px-4 py-2">{service.ID}</td>
+      <td className="border px-4 py-2">{service.direccion}</td>
       <td className="border px-4 py-2">{service.description}</td>
-      <td className="border px-4 py-2">{service.startDate}</td>
-      <td className="border px-4 py-2">{service.endDate}</td>
+      <td className="border px-4 py-2">{formatDate(service.startDate)}</td>
+      <td className="border px-4 py-2">{formatDate(service.endDate)}</td>
       <td className="border px-4 py-2">
         <button
           onClick={() => handleStatusClick(service)}
@@ -25,7 +28,7 @@ const ServiceRow = ({ service, handleStatusClick, handleServiceTypeClick, select
             onClick={() => handleServiceTypeClick(service)}
             className="text-blue-400 hover:text-blue-300 underline"
           >
-            {selectedService && selectedService.requestId === service.requestId
+            {selectedService && selectedService.ID === service.ID
               ? 'Seleccionando...'
               : 'Seleccionar tipo'}
           </button>

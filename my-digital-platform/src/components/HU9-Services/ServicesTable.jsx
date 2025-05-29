@@ -19,7 +19,7 @@ const ServicesTable = ({ slice, handleStatusClick, handleServiceTypeClick, selec
       <tbody>
         {slice.map(p => (
           <ServiceRow 
-            key={p.requestId} 
+            key={p.ID} 
             service={p} 
             handleStatusClick={handleStatusClick}
             handleServiceTypeClick={handleServiceTypeClick}

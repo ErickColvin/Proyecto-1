@@ -63,7 +63,6 @@ const initialServiceTypes = [
 ];
 
 const DataServices = () => {
-  // State declarations
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
   const [services, setServices] = useState(initialServices);
@@ -75,6 +74,7 @@ const DataServices = () => {
   const [serviceTypes, setServiceTypes] = useState(initialServiceTypes);
   const [statusOptions, setStatusOptions] = useState(initialStatusOptions);
 
+
   // Calculate total pages based on services length
   const totalPages = Math.ceil(services.length / 10);
 
@@ -82,14 +82,14 @@ const DataServices = () => {
   const filteredServices = useMemo(() => {
     return services.filter(service => {
       const matchesSearch = service.serviceName.toLowerCase().includes(search.toLowerCase()) ||
-                          service.description.toLowerCase().includes(search.toLowerCase());
+        service.description.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = !category || service.status === category;
       return matchesSearch && matchesCategory;
     });
   }, [services, search, category]);
 
   // Slice logic for pagination
-  const slice = useMemo(() => 
+  const slice = useMemo(() =>
     filteredServices.slice((page - 1) * 10, page * 10),
     [filteredServices, page]
   );
@@ -105,10 +105,11 @@ const DataServices = () => {
     setIsDrawerOpen(true);
   };
 
+
   return (
     <div className="p-4 text-white">
-      <SearchBar 
-        search={search} 
+      <SearchBar
+        search={search}
         setSearch={setSearch}
         category={category}
         setCategory={setCategory}
@@ -116,14 +117,14 @@ const DataServices = () => {
         setPage={setPage}
       />
 
-      <ServicesTable 
+      <ServicesTable
         slice={slice}
         handleStatusClick={handleStatusClick}
         handleServiceTypeClick={handleServiceTypeClick}
         selectedService={selectedService}
       />
 
-      <ServiceTypeDrawer 
+      <ServiceTypeDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
         serviceTypes={serviceTypes}
@@ -131,7 +132,7 @@ const DataServices = () => {
         setServices={setServices}
       />
 
-      <StatusDrawer 
+      <StatusDrawer
         isOpen={isStatusDrawerOpen}
         onClose={() => setIsStatusDrawerOpen(false)}
         statusOptions={statusOptions}

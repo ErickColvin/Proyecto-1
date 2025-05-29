@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import AddServiceButton from './AddServicesButton';
 
 const SearchBar = ({ search, setSearch, category, setCategory, services, setPage }) => {
+  const [servicesf, setServicesf] = useState([])
+  const addService = (srv) => {
+    setServices([...servicesf, srv])
+  }
   return (
     <div className="flex space-x-4 mb-4">
       <input
@@ -20,6 +25,7 @@ const SearchBar = ({ search, setSearch, category, setCategory, services, setPage
           <option key={status} value={status}>{status}</option>
         ))}
       </select>
+      <AddServiceButton onAddService={addService} />
     </div>
   );
 };

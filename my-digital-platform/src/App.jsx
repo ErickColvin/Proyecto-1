@@ -2,11 +2,11 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { DataProvider } from './context/DataProvider';
-import Navbar      from './components/Navbar';
-import Home        from './pages/Home';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
 import ImportExcel from './pages/ImportExcel';
-import DataTable   from './pages/DataTable';
-import DataServices from './components/DataServices';
+import DataTable from './pages/DataTable';
+import DataServices from './components/HU9-Services/DataServices';
 
 function App() {
   return (

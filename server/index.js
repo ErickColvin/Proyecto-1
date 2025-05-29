@@ -2,9 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
 import xlsx from 'xlsx';
+import router from './HU9-Services/services.route.js';
+import "./database.js";
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
 
 // Usamos multer en memoria
@@ -57,6 +59,8 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
     return res.status(500).json({ error: 'Error al procesar Excel' });
   }
 });
+
+app.use('/api/services', router);
 
 /** GET /api/products → lista de productos */
 app.get('/api/products', (req, res) => {

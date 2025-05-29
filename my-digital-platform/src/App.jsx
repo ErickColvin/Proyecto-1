@@ -1,30 +1,48 @@
-// src/App.jsx
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { DataProvider } from './context/DataProvider';
-import Navbar      from './components/Navbar';
-import Home        from './pages/Home';
-import ImportExcel from './pages/ImportExcel';
-import DataTable   from './pages/DataTable';
+import React, { useState } from 'react';
+import Header from './components/Header';
+import EmployeeList from './components/EmployeeList';
+import EmployeeForm from './components/EmployeeForm';
+import Modal from './components/Modal';
 
-function App() {
+const App = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentEmployee, setCurrentEmployee] = useState(null);
+
+  const handleAddEmployee = () => {
+    setCurrentEmployee(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditEmployee = (id) => {
+    // Lógica para obtener el empleado por ID
+    setIsModalOpen(true);
+  };
+
+  const handleSubmit = (data) => {
+    // Lógica para guardar el empleado
+    setIsModalOpen(false);
+  };
+
   return (
-    <DataProvider>
-      <BrowserRouter>
-        <Navbar />
-        <main className="container mx-auto py-6">
-          <Routes>
-            {/* Ruta principal */}
-            <Route path="/" element={<Home />} />
-            {/* Importar Excel */}
-            <Route path="/import" element={<ImportExcel />} />
-            {/* Listado de productos */}
-            <Route path="/products" element={<DataTable />} />
-          </Routes>
-        </main>
-      </BrowserRouter>
-    </DataProvider>
+    <div className="min-h-screen bg-gray-100">
+      <Header onAddEmployee={handleAddEmployee} />
+      <main className="p-4">
+        <EmployeeList onEdit={handleEditEmployee} />
+      </main>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={currentEmployee ? 'Edit Employee' : 'Add Employee'}
+      >
+        <EmployeeForm
+          initialData={currentEmployee || {}}
+          onSubmit={handleSubmit}
+          onCancel={() => setIsModalOpen(false)}
+          isEditing={!!currentEmployee}
+        />
+      </Modal>
+    </div>
   );
-}
+};
 
 export default App;

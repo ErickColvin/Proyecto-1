@@ -5,6 +5,13 @@ const AdminView = () => {
   const [usuarioActual, setUsuarioActual] = useState(null);
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [newUser, setNewUser] = useState({
+    nombre: '',
+    correo: '',
+    rol: 'usuario',
+    contraseña: ''
+  });
   const navigate = useNavigate();
 
   // Cargar usuarios desde la API
@@ -76,6 +83,32 @@ const AdminView = () => {
     }
   };
 
+  const createUser = async () => {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newUser)
+      });
+
+      if (response.ok) {
+        const createdUser = await response.json();
+        setUsuarios(prev => [...prev, createdUser]);
+        setNewUser({ nombre: '', correo: '', rol: 'usuario', contraseña: '' });
+        setShowCreateForm(false);
+        alert('Usuario creado exitosamente');
+      } else {
+        const errorData = await response.json();
+        alert(errorData.error || 'Error al crear usuario');
+      }
+    } catch (error) {
+      console.error('Error al crear usuario:', error);
+      alert('Error al crear usuario');
+    }
+  };
+
   const handleLogout = () => {
     setUsuarioActual(null);
     navigate("/dashboard"); // Redirigir al dashboard después de cerrar sesión
@@ -128,7 +161,86 @@ const AdminView = () => {
 
           {usuarioActual.rol === "admin" ? (
             <>
-              <h3 className="text-xl font-semibold mb-4 text-white">Gestión de Usuarios</h3>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-semibold text-white">Gestión de Usuarios</h3>
+                <button
+                  onClick={() => setShowCreateForm(!showCreateForm)}
+                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-semibold"
+                >
+                  {showCreateForm ? 'Cancelar' : 'Crear Usuario'}
+                </button>
+              </div>
+
+              {/* Formulario para crear usuario */}
+              {showCreateForm && (
+                <div className="bg-gray-800 p-6 rounded-lg mb-6">
+                  <h4 className="text-lg font-semibold text-white mb-4">Crear Nuevo Usuario</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-white text-sm font-medium mb-2">Nombre</label>
+                      <input
+                        type="text"
+                        value={newUser.nombre}
+                        onChange={(e) => setNewUser({...newUser, nombre: e.target.value})}
+                        className="w-full p-2 border rounded"
+                        placeholder="Ingrese el nombre completo"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-white text-sm font-medium mb-2">Correo</label>
+                      <input
+                        type="email"
+                        value={newUser.correo}
+                        onChange={(e) => setNewUser({...newUser, correo: e.target.value})}
+                        className="w-full p-2 border rounded"
+                        placeholder="correo@ejemplo.com"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-white text-sm font-medium mb-2">Rol</label>
+                      <select
+                        value={newUser.rol}
+                        onChange={(e) => setNewUser({...newUser, rol: e.target.value})}
+                        className="w-full p-2 border rounded"
+                      >
+                        <option value="usuario">Usuario</option>
+                        <option value="admin">Administrador</option>
+                        <option value="gestor">Gestor</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-white text-sm font-medium mb-2">Contraseña</label>
+                      <input
+                        type="password"
+                        value={newUser.contraseña}
+                        onChange={(e) => setNewUser({...newUser, contraseña: e.target.value})}
+                        className="w-full p-2 border rounded"
+                        placeholder="Mínimo 6 caracteres"
+                        minLength="6"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-end space-x-3 mt-4">
+                    <button
+                      onClick={() => setShowCreateForm(false)}
+                      className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      onClick={createUser}
+                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                      disabled={!newUser.nombre || !newUser.correo || !newUser.contraseña}
+                    >
+                      Crear Usuario
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {loading ? (
                 <div className="text-center text-white">Cargando usuarios...</div>
               ) : (

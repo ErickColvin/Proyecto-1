@@ -18,10 +18,10 @@ import Servicio from './models/Servicio.js';
 import HistorialError from './models/HistorialError.js';
 import Reporte from './models/Reporte.js';
 import ServiceRequest from './models/ServiceRequest.js';
+import router from './HU9-Services/services.route.js';
 
 // Cargar variables de entorno
 dotenv.config();
-import router from './HU9-Services/services.route.js';
 
 const app = express();
 app.use(cors({ origin: "http://localhost:5173" }));

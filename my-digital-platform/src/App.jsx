@@ -7,9 +7,7 @@ import AdminView from './pages/AdminView';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import ImportExcel from './pages/ImportExcel';
-import DataTable from './pages/DataTable';
 import DataServices from './components/HU9-Services/DataServices';
-import DataTable   from './pages/DataTable';
 import Login from './pages/Login';
 
 function App() {
@@ -27,7 +25,7 @@ function App() {
               {/* Importar Excel */}
               <Route path="/import" element={<ImportExcel />} />
               {/* Listado de productos */}
-              <Route path="/products" element={<DataTable />} />
+              <Route path="/services" element={<DataServices  />} />
                {/* Pestaña login */}
               <Route path="/login" element={<Login />} />
               <Route path='/home' element={<Home />} />

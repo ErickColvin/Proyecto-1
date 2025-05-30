@@ -52,12 +52,12 @@ const Navbar = () => {
           Importar Excel
         </NavLink>
         <NavLink 
-          to="/products" 
+          to="/services" 
           className={({ isActive }) => 
             `hover:text-blue-300 px-3 py-1 rounded ${isActive ? 'bg-blue-600' : ''}`
           }
         >
-          Productos
+          Servicios
         </NavLink>
         {user?.rol === 'admin' && (
           <NavLink 

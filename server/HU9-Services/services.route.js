@@ -9,8 +9,8 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    const { nameService, ID, direccion, description, startDate, endDate, estado, tipoDeServicio } = req.body;
-    const newService = new Service({nameService, ID, direccion, description, startDate, endDate, estado, tipoDeServicio});
+    const { nameService, ID, direccion, description, startDate, endDate, status, tipoDeServicio } = req.body;
+    const newService = new Service({nameService, ID, direccion, description, startDate, endDate, status, tipoDeServicio});
     await newService.save();
     res.status(201).json(newService);
 });

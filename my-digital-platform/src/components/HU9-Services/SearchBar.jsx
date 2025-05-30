@@ -21,7 +21,7 @@ const SearchBar = ({ search, setSearch, category, setCategory, services, setPage
         className="border px-2 py-1 bg-gray-700 text-white rounded"
       >
         {/* Add a key here */}
-        <option key="all" value="">Todos los estados</option>
+        <option >Todos los estados</option>
 
         {[...new Set(services.map(p => p.status))].map(status => (
           <option key={status} value={status}>{status}</option>

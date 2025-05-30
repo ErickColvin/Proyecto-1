@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { isValidEmail } from '../utils'; // Asegúrate de que la ruta sea correcta
+import { isValidEmail } from '../../utils'; // Asegúrate de que la ruta sea correcta
 
 const EmployeeForm = ({ initialData = {}, onSubmit, onCancel, isEditing = false }) => {
   // 1. Inicialización del estado del formulario (solo se ejecuta al montar)

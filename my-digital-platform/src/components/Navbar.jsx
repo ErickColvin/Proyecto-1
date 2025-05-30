@@ -1,13 +1,20 @@
 // src/components/Navbar.jsx
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { DataContext } from '../context/DataContext';
+// Si necesitas datos de empleados en el navbar, descomenta esta línea:
+// import { useEmployees } from '../context/EmployeeProvider';
 
 const Navbar = () => {
-  const { alerts } = useContext(DataContext) || { alerts: [] };
+  // Si necesitas usar datos de empleados, descomenta estas líneas:
+  // const { employees } = useEmployees();
+  // const alerts = []; // Define tu lógica de alertas aquí
+  
+  // Por ahora, definimos alerts como array vacío para evitar errores
+  const alerts = [];
 
   return (
     <nav className="bg-gray-900 shadow p-4 flex justify-between text-white">
+      <NavLink to="/employees" className="hover:text-blue-300">Empleados</NavLink>
       <div className="flex space-x-4">
         <NavLink to="/"        className="hover:text-blue-300">Dashboard</NavLink>
         <NavLink to="/import"  className="hover:text-blue-300">Importar Excel</NavLink>

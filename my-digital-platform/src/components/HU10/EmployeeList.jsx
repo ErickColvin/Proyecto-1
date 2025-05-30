@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useEmployees } from '../context/EmployeeContext';
-import { formatDate, getRoleColorClass, getStatusColorClass } from '../utils';
+import { useEmployees } from '../../context/EmployeeProvider';
+import { formatDate, getRoleColorClass, getStatusColorClass } from '../../utils';
 import { Edit, Trash2, Search, Filter } from 'lucide-react';
 import ConfirmationModal from './ConfirmationModal';
 

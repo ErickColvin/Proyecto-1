@@ -1,82 +1,32 @@
-import React, { useState } from 'react';
-import { EmployeeProvider } from './components/HU10/EmployeeContext';
-import Header from './components/HU10/Header';
-import EmployeeList from './components/HU10/EmployeeList';
-import EmployeeForm from './components/EmployeeForm';
-import Modal from './components/HU10/Modal';
-import { useEmployees } from './components/HU10/EmployeeContext';
-
-function EmployeeManagementApp() {
-  const { addEmployee, updateEmployee, getEmployee } = useEmployees();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentEmployeeId, setCurrentEmployeeId] = useState(null);
-
-  const handleAddEmployee = () => {
-    setIsEditing(false);
-    setCurrentEmployeeId(null);
-    setIsModalOpen(true);
-  };
-
-  const handleEditEmployee = (id) => {
-    setIsEditing(true);
-    setCurrentEmployeeId(id);
-    setIsModalOpen(true);
-  };
-
-  const handleSubmit = (data) => {
-    if (isEditing && currentEmployeeId) {
-      updateEmployee(currentEmployeeId, data);
-    } else {
-      addEmployee(data);
-    }
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const getCurrentEmployeeData = () => {
-    if (isEditing && currentEmployeeId) {
-      const employee = getEmployee(currentEmployeeId);
-      if (employee) {
-        const { name, email, role, status } = employee;
-        return { name, email, role, status };
-      }
-    }
-    return undefined;
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <Header onAddEmployee={handleAddEmployee} />
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <EmployeeList onEdit={handleEditEmployee} />
-        </div>
-      </main>
-
-      <Modal
-        isOpen={isModalOpen}
-        onClose={handleCancel}
-        title={isEditing ? 'Edit Employee' : 'Add New Employee'}
-      >
-        <EmployeeForm
-          initialData={getCurrentEmployeeData()}
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
-          isEditing={isEditing}
-        />
-      </Modal>
-    </div>
-  );
-}
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { EmployeeProvider } from './context/EmployeeProvider'; // Corregida la ruta
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+// import ImportExcel from './pages/ImportExcel';
+// import { DataTable } from './pages/DataTable';
+// import DataServices from './components/DataServices';
+import EmployeeManagementModule from "./components/HU10/HU10app";
 
 function App() {
   return (
     <EmployeeProvider>
-      <EmployeeManagementApp />
+      <BrowserRouter>
+        <Navbar />
+        <main className="container mx-auto py-6">
+          <Routes>
+            {/* Ruta principal */}
+            <Route path="/" element={<Home />} />
+            {/* Importar Excel */}
+            {/* <Route path="/import" element={<ImportExcel />} /> */}
+            {/* Listado de productos */}
+            {/* <Route path="/products" element={<DataTable />} />
+            <Route path="/services" element={<DataServices />} /> */}
+            {/* Ruta para empleados - solo una ruta, no duplicada */}
+            <Route path="/employees" element={<EmployeeManagementModule />} />
+          </Routes>
+        </main>
+      </BrowserRouter>
     </EmployeeProvider>
   );
 }

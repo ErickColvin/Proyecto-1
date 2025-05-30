@@ -1,4 +1,4 @@
-// src/pages/DataTable.jsx
+/* // src/pages/DataTable.jsx
 import React, { useContext, useState, useMemo } from 'react';
 import { DataContext } from '../context/DataContext';
 
@@ -83,4 +83,4 @@ const DataTable = () => {
   );
 };
 
-export default DataTable;
+export default DataTable; */

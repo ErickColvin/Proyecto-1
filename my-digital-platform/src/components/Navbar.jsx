@@ -19,7 +19,7 @@ const Navbar = () => {
     return (
       <nav className="bg-gray-900 shadow p-4 flex justify-between text-white">
         <div className="flex items-center">
-          <h1 className="text-xl font-bold">Sistema de Inventario</h1>
+          <h1 className="text-xl font-bold">Data Up</h1>
         </div>
         <div>
           <NavLink to="/login" className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">
@@ -35,34 +35,34 @@ const Navbar = () => {
     <nav className="bg-gray-900 shadow p-4 flex justify-between text-white">
       <div className="flex space-x-4 items-center">
         <h1 className="text-lg font-bold mr-4">Inventario</h1>
-        <NavLink 
-          to="/dashboard" 
-          className={({ isActive }) => 
+        <NavLink
+          to="/home"
+          className={({ isActive }) =>
             `hover:text-blue-300 px-3 py-1 rounded ${isActive ? 'bg-blue-600' : ''}`
           }
         >
           Dashboard
         </NavLink>
-        <NavLink 
-          to="/import" 
-          className={({ isActive }) => 
+        <NavLink
+          to="/import"
+          className={({ isActive }) =>
             `hover:text-blue-300 px-3 py-1 rounded ${isActive ? 'bg-blue-600' : ''}`
           }
         >
           Importar Excel
         </NavLink>
-        <NavLink 
-          to="/services" 
-          className={({ isActive }) => 
+        <NavLink
+          to="/services"
+          className={({ isActive }) =>
             `hover:text-blue-300 px-3 py-1 rounded ${isActive ? 'bg-blue-600' : ''}`
           }
         >
           Servicios
         </NavLink>
         {user?.rol === 'admin' && (
-          <NavLink 
-            to="/admin" 
-            className={({ isActive }) => 
+          <NavLink
+            to="/admin"
+            className={({ isActive }) =>
               `hover:text-blue-300 px-3 py-1 rounded ${isActive ? 'bg-blue-600' : ''}`
             }
           >
@@ -70,7 +70,7 @@ const Navbar = () => {
           </NavLink>
         )}
       </div>
-      
+
       <div className="flex items-center space-x-4">
         <button className="relative">
           🔔
@@ -80,7 +80,7 @@ const Navbar = () => {
             </span>
           )}
         </button>
-        
+
         <div className="flex items-center space-x-3">
           <span className="text-sm">Hola, {user?.nombre}</span>
           <button

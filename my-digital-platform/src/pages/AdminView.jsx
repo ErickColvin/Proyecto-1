@@ -39,7 +39,7 @@ const AdminView = () => {
 
         if (user && user.rol === "usuario") {
           // Redirigir usuarios normales al dashboard
-          navigate("/dashboard");
+          navigate("/home");
         }
       }
     } catch (error) {
@@ -99,7 +99,7 @@ const AdminView = () => {
           </button>
           <button
             className="bg-gray-600 text-white px-6 py-3 rounded hover:bg-gray-700"
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/home")}
           >
             Volver al Dashboard
           </button>
@@ -112,7 +112,7 @@ const AdminView = () => {
             </h2>
             <div className="flex space-x-3">
               <button
-                onClick={() => navigate("/dashboard")}
+                onClick={() => navigate("/home")}
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
               >
                 Dashboard

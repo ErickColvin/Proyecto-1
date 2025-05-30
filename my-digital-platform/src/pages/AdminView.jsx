@@ -82,13 +82,13 @@ const AdminView = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-black px-8 py-10">
+    <div className="min-h-screen bg-dark-900 text-black px-8 py-10">
       {!usuarioActual ? (
         <div className="max-w-md mx-auto text-center">
           <h2 className="text-xl font-semibold mb-6 text-white">
             Panel de Administración
           </h2>
-          <p className="text-gray-300 mb-6">
+          <p className="text-dark-300 mb-6">
             Acceso restringido - Inicia sesión con credenciales de administrador
           </p>
           <button
@@ -98,7 +98,7 @@ const AdminView = () => {
             Iniciar como Admin
           </button>
           <button
-            className="bg-gray-600 text-white px-6 py-3 rounded hover:bg-gray-700"
+            className="bg-dark-600 text-white px-6 py-3 rounded hover:bg-gray-700"
             onClick={() => navigate("/home")}
           >
             Volver al Dashboard
@@ -132,9 +132,9 @@ const AdminView = () => {
               {loading ? (
                 <div className="text-center text-white">Cargando usuarios...</div>
               ) : (
-                <div className="bg-white rounded-lg overflow-hidden">
+                <div className="bg-dark rounded-lg overflow-hidden">
                   <table className="w-full border">
-                    <thead className="bg-gray-200">
+                    <thead className="bg-dark-200">
                       <tr>
                         <th className="p-2 border font-semibold" style={{color: '#000000'}}>ID</th>
                         <th className="p-2 border font-semibold" style={{color: '#000000'}}>Nombre</th>

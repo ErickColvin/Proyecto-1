@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { postServ } from './postServices';
 
 const AddServiceForm = ({ onAddService, onClose }) => {
@@ -13,7 +13,7 @@ const AddServiceForm = ({ onAddService, onClose }) => {
 
   const handleSubmit = async (e) => {
 
-    
+
     e.preventDefault();
     try {
       const serviceData = {
@@ -28,12 +28,13 @@ const AddServiceForm = ({ onAddService, onClose }) => {
       };
       console.log(serviceData)
       await postServ(serviceData);
-
+      onAddService(serviceData);
+      onClose();
+      window.location.reload();
     } catch (error) {
       console.error('Error al agregar el servicio:', error);
     }
   }
-
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

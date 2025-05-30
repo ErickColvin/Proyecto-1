@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { EmployeeProvider } from './context/EmployeeContext';
-import Header from './components/Header';
-import EmployeeList from './components/EmployeeList';
+import { EmployeeProvider } from './components/HU10/EmployeeContext';
+import Header from './components/HU10/Header';
+import EmployeeList from './components/HU10/EmployeeList';
 import EmployeeForm from './components/EmployeeForm';
-import Modal from './components/Modal';
-import { useEmployees } from './context/EmployeeContext';
+import Modal from './components/HU10/Modal';
+import { useEmployees } from './components/HU10/EmployeeContext';
 
 function EmployeeManagementApp() {
   const { addEmployee, updateEmployee, getEmployee } = useEmployees();

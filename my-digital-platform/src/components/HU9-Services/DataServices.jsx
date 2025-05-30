@@ -50,7 +50,7 @@ const DataServices = () => {
     return service.filter(service => {
       const matchesSearch = service.nameService.toLowerCase().includes(search.toLowerCase()) ||
         service.description.toLowerCase().includes(search.toLowerCase());
-      const matchesCategory = !category || service.estado === category;
+      const matchesCategory = !category || service.status === category;
       return matchesSearch && matchesCategory;
     });
   }, [service, search, category]);

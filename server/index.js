@@ -85,8 +85,14 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
 app.use('/api/services', router);
 
 /** GET /api/products → lista de productos */
-app.get('/api/products', (req, res) => {
-  res.json(products);
+app.get('/api/products', async (req, res) => {
+  try {
+    const products = await Product.find().sort({ nombre: 1 });
+    res.json(products);
+  } catch (error) {
+    console.error('Error al obtener productos:', error);
+    res.status(500).json({ error: 'Error al obtener productos' });
+  }
 });
 
 /** GET /api/alerts → lista de alertas desde MongoDB */
@@ -131,6 +137,43 @@ app.put('/api/users/:id', async (req, res) => {
   } catch (error) {
     console.error('Error al actualizar usuario:', error);
     res.status(500).json({ error: 'Error al actualizar usuario' });
+  }
+});
+
+/** POST /api/users → crear nuevo usuario */
+app.post('/api/users', async (req, res) => {
+  try {
+    const { nombre, correo, rol, contraseña } = req.body;
+    
+    // Validar campos requeridos
+    if (!nombre || !correo || !rol || !contraseña) {
+      return res.status(400).json({ error: 'Todos los campos son requeridos' });
+    }
+    
+    // Verificar si el correo ya existe
+    const existingUser = await User.findOne({ correo });
+    if (existingUser) {
+      return res.status(400).json({ error: 'El correo ya está en uso' });
+    }
+    
+    // Crear nuevo usuario
+    const newUser = new User({
+      nombre,
+      correo,
+      contraseña,
+      rol,
+      activo: true
+    });
+    
+    const savedUser = await newUser.save();
+    res.status(201).json(savedUser);
+  } catch (error) {
+    console.error('Error al crear usuario:', error);
+    if (error.code === 11000) {
+      res.status(400).json({ error: 'El correo ya está en uso' });
+    } else {
+      res.status(500).json({ error: 'Error al crear usuario' });
+    }
   }
 });
 
@@ -399,6 +442,7 @@ const startServer = async () => {
       console.log(`   GET  /api/alerts`);
       console.log(`   GET  /api/users`);
       console.log(`   POST /api/upload`);
+      console.log(`   POST /api/users`);
       console.log(`   PUT  /api/users/:id`);
       console.log(`   GET  /api/servicios`);
       console.log(`   POST /api/servicios`);

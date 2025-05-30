@@ -94,7 +94,7 @@ const DataServices = () => {
       <ServiceTypeDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-        serviceTypes={serviceTypes}
+        tipoDeServicio={serviceTypes}
         selectedService={selectedService}
         setServices={setService}
       />

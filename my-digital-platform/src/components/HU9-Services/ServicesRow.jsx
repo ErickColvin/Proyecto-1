@@ -12,8 +12,28 @@ const ServiceRow = ({ service, handleStatusClick, handleServiceTypeClick, select
       <td className="border px-4 py-2">{service.description}</td>
       <td className="border px-4 py-2">{formatDate(service.startDate)}</td>
       <td className="border px-4 py-2">{formatDate(service.endDate)}</td>
-      <td className="border px-4 py-2">{service.status}</td>
-      <td className="border px-4 py-2">{service.tipoDeServicio}</td>
+      <td className="border px-4 py-2">
+        <button
+          onClick={() => handleStatusClick(service)}
+          className="text-blue-400 hover:text-blue-300 underline"
+        >
+          {service.status || 'Seleccionar estado'}
+        </button>
+      </td>
+      <td className="border px-4 py-2">
+        {service.tipoDeServicio ? (
+          <span>{service.tipoDeServicio}</span>
+        ) : (
+          <button
+            onClick={() => handleServiceTypeClick(service)}
+            className="text-blue-400 hover:text-blue-300 underline"
+          >
+            {selectedService && selectedService.ID === service.ID
+              ? 'Seleccionando...'
+              : 'Seleccionar tipo'}
+          </button>
+        )}
+      </td>
     </tr>
   );
 };

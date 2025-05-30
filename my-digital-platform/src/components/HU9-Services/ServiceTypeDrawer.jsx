@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ServiceTypeDrawer = ({ isOpen, onClose, serviceTypes, selectedService, setServices }) => {
+const ServiceTypeDrawer = ({ isOpen, onClose, tipoDeServicio, selectedService, setServices }) => {
   if (!isOpen) return null;
 
   return (
@@ -17,13 +17,13 @@ const ServiceTypeDrawer = ({ isOpen, onClose, serviceTypes, selectedService, set
         </div>
 
         <div className="space-y-4">
-          {serviceTypes.map(type => (
+          {tipoDeServicio.map(type => (
             <div
-              key={type.id}
+              key={type.ID}
               onClick={() => {
                 setServices(prev =>
                   prev.map(s =>
-                    s.requestId === selectedService.requestId
+                    s.ID === selectedService.ID
                       ? { ...s, serviceType: type.name }
                       : s
                   )

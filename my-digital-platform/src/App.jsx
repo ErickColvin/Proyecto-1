@@ -1,48 +1,84 @@
 import React, { useState } from 'react';
+import { EmployeeProvider } from './context/EmployeeContext';
 import Header from './components/Header';
 import EmployeeList from './components/EmployeeList';
 import EmployeeForm from './components/EmployeeForm';
 import Modal from './components/Modal';
+import { useEmployees } from './context/EmployeeContext';
 
-const App = () => {
+function EmployeeManagementApp() {
+  const { addEmployee, updateEmployee, getEmployee } = useEmployees();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentEmployee, setCurrentEmployee] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentEmployeeId, setCurrentEmployeeId] = useState(null);
 
   const handleAddEmployee = () => {
-    setCurrentEmployee(null);
+    setIsEditing(false);
+    setCurrentEmployeeId(null);
     setIsModalOpen(true);
   };
 
   const handleEditEmployee = (id) => {
-    // Lógica para obtener el empleado por ID
+    setIsEditing(true);
+    setCurrentEmployeeId(id);
     setIsModalOpen(true);
   };
 
   const handleSubmit = (data) => {
-    // Lógica para guardar el empleado
+    if (isEditing && currentEmployeeId) {
+      updateEmployee(currentEmployeeId, data);
+    } else {
+      addEmployee(data);
+    }
     setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const getCurrentEmployeeData = () => {
+    if (isEditing && currentEmployeeId) {
+      const employee = getEmployee(currentEmployeeId);
+      if (employee) {
+        const { name, email, role, status } = employee;
+        return { name, email, role, status };
+      }
+    }
+    return undefined;
   };
 
   return (
     <div className="min-h-screen bg-gray-100">
       <Header onAddEmployee={handleAddEmployee} />
-      <main className="p-4">
-        <EmployeeList onEdit={handleEditEmployee} />
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div className="px-4 py-6 sm:px-0">
+          <EmployeeList onEdit={handleEditEmployee} />
+        </div>
       </main>
+
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title={currentEmployee ? 'Edit Employee' : 'Add Employee'}
+        onClose={handleCancel}
+        title={isEditing ? 'Edit Employee' : 'Add New Employee'}
       >
         <EmployeeForm
-          initialData={currentEmployee || {}}
+          initialData={getCurrentEmployeeData()}
           onSubmit={handleSubmit}
-          onCancel={() => setIsModalOpen(false)}
-          isEditing={!!currentEmployee}
+          onCancel={handleCancel}
+          isEditing={isEditing}
         />
       </Modal>
     </div>
   );
-};
+}
+
+function App() {
+  return (
+    <EmployeeProvider>
+      <EmployeeManagementApp />
+    </EmployeeProvider>
+  );
+}
 
 export default App;

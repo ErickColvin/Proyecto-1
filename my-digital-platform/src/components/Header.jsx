@@ -8,13 +8,13 @@ const Header = ({ onAddEmployee }) => {
         <div className="flex h-16 justify-between items-center">
           <div className="flex items-center">
             <Users className="h-8 w-8 text-blue-600" />
-            <h1 className="ml-2 text-xl font-bold text-gray-900">Employee Management</h1>
+            <h1 className="ml-2 text-xl font-bold text-gray-900">Gestión de Empleados</h1>
           </div>
           <button
             onClick={onAddEmployee}
             className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
-            Add Employee
+            Añadir Empleado
           </button>
         </div>
       </div>

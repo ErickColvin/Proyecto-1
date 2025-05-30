@@ -53,7 +53,7 @@ const EmployeeList = ({ onEdit }) => {
             <input
               type="text"
               className="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-              placeholder="Search employees..."
+              placeholder="Buscar Empleados..."
               value={searchQuery}
               onChange={handleSearchChange}
             />
@@ -65,9 +65,9 @@ const EmployeeList = ({ onEdit }) => {
               value={statusFilter}
               onChange={handleStatusFilterChange}
             >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="all">Todos los estados</option>
+              <option value="active">Activo</option>
+              <option value="inactive">Inactivo</option>
             </select>
           </div>
         </div>
@@ -78,29 +78,50 @@ const EmployeeList = ({ onEdit }) => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Nombre
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Email
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Role
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Rol
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Status
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Created
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Crear 
                 </th>
-                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Acción
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredEmployees.map((employee, index) => (
-                <tr key={employee.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <tr
+                  key={employee.id}
+                  className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
+                >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{employee.name}</div>
                   </td>
@@ -108,12 +129,20 @@ const EmployeeList = ({ onEdit }) => {
                     <div className="text-sm text-gray-500">{employee.email}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getRoleColorClass(employee.role)}`}>
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getRoleColorClass(
+                        employee.role
+                      )}`}
+                    >
                       {employee.role.charAt(0).toUpperCase() + employee.role.slice(1)}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColorClass(employee.status)}`}>
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColorClass(
+                        employee.status
+                      )}`}
+                    >
                       {employee.status.charAt(0).toUpperCase() + employee.status.slice(1)}
                     </span>
                   </td>
@@ -140,7 +169,7 @@ const EmployeeList = ({ onEdit }) => {
           </table>
         ) : (
           <div className="p-8 text-center">
-            <p className="text-gray-500">No employees found. Try adjusting your search or filter.</p>
+            <p className="text-gray-500">No se encontraron empleados. Intenta ajustar tu búsqueda o filtro</p>
           </div>
         )}
       </div>
@@ -149,9 +178,10 @@ const EmployeeList = ({ onEdit }) => {
         isOpen={showDeleteModal}
         onClose={cancelDelete}
         onConfirm={confirmDelete}
-        title="Delete Employee"
-        message="Are you sure you want to delete this employee? This action cannot be undone."
-        confirmButtonText="Delete"
+        title="Borrar empleado"
+        message="Esta seguro que desea eliminar este empleado? Esta acción no se puede deshacer."
+        confirmButtonText="Borrar"
+        cancelButtonText="Cancelar"
         confirmButtonColor="bg-red-600 hover:bg-red-700"
       />
     </div>

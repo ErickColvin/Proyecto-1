@@ -21,9 +21,10 @@ import ServiceRequest from './models/ServiceRequest.js';
 
 // Cargar variables de entorno
 dotenv.config();
+import router from './HU9-Services/services.route.js';
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
 
 // Usamos multer en memoria
@@ -81,15 +82,11 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
   }
 });
 
-/** GET /api/products → lista de productos desde MongoDB */
-app.get('/api/products', async (req, res) => {
-  try {
-    const products = await Product.find().sort({ createdAt: -1 });
-    res.json(products);
-  } catch (error) {
-    console.error('Error al obtener productos:', error);
-    res.status(500).json({ error: 'Error al obtener productos' });
-  }
+app.use('/api/services', router);
+
+/** GET /api/products → lista de productos */
+app.get('/api/products', (req, res) => {
+  res.json(products);
 });
 
 /** GET /api/alerts → lista de alertas desde MongoDB */

@@ -11,7 +11,7 @@ export const DataProvider = ({ children }) => {
       try {
         const [pRes, aRes] = await Promise.all([
           fetch('/api/products'),
-          fetch('/api/alerts'),
+          fetch('/api/alerts'), // Agregado para servicios
         ]);
         setProducts(await pRes.json());
         setAlerts(await aRes.json());
@@ -30,9 +30,8 @@ export const DataProvider = ({ children }) => {
         body: form,
       });
       if (!res.ok) throw new Error(`Status ${res.status}`);
-      // refresca datos
       const productsData = await (await fetch('/api/products')).json();
-      const alertsData   = await (await fetch('/api/alerts')).json();
+      const alertsData = await (await fetch('/api/alerts')).json();
       setProducts(productsData);
       setAlerts(alertsData);
       return true;

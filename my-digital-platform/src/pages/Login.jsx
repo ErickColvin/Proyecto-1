@@ -9,14 +9,18 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
 
-  // Si ya está autenticado, redirigir al dashboard
+  // Redirección inteligente basada en el estado de autenticación y el rol
   React.useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
+    if (isAuthenticated && user) {
+      if (user.rol === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, user, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -24,16 +28,11 @@ export default function Login() {
     setError("");
 
     try {
+      // La función login ahora solo necesita iniciar sesión.
+      // El useEffect se encargará de la redirección.
       const result = await login({ email: correo, password: contraseña });
       
-      if (result.success) {
-        // Redirigir según el rol
-        if (result.user.rol === "admin") {
-          navigate("/admin");
-        } else {
-          navigate("/dashboard");
-        }
-      } else {
+      if (!result.success) {
         setError(result.message || "Error al iniciar sesión");
       }
     } catch (error) {

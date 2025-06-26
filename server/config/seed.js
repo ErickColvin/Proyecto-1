@@ -81,13 +81,19 @@ const initialServicios = [
 
 export const seedDatabase = async () => {
   try {
-    // Limpiar usuarios existentes para recrear con contraseñas
-    await User.deleteMany({});
-    console.log('🗑️ Usuarios existentes eliminados');
+    // Verificar si ya existen usuarios
+    const userCount = await User.countDocuments();
+    let usuarios;
     
-    // Crear usuarios con contraseñas
-    const usuarios = await User.insertMany(initialUsers);
-    console.log('✅ Usuarios con contraseñas creados');
+    if (userCount === 0) {
+      // Solo crear usuarios si no existen
+      usuarios = await User.insertMany(initialUsers);
+      console.log('✅ Usuarios con contraseñas creados');
+    } else {
+      // Usar usuarios existentes
+      usuarios = await User.find();
+      console.log('ℹ️ Usuarios ya existen, usando usuarios existentes');
+    }
 
     // Verificar productos
     const productCount = await Product.countDocuments();

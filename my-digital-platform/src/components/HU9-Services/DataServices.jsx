@@ -1,77 +1,63 @@
-import React, { useState, useMemo, useContext, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import SearchBar from "./SearchBar";
 import ServicesTable from './ServicesTable';
 import Pagination from './Pagination';
-import ServiceTypeDrawer from './ServiceTypeDrawer';
-import StatusDrawer from './StatusDrawer';
-
-const initialStatusOptions = ["PENDIENTE", "EN_PROGRESO", "COMPLETADO", "CANCELADO"];
-
-const initialServiceTypes = [
-  { id: 1, name: "Instalación", description: "Servicios de instalación nuevos" },
-  { id: 2, name: "Mantenimiento", description: "Servicios de mantenimiento preventivo" },
-  { id: 3, name: "Reparación", description: "Servicios de reparación correctiva" },
-  { id: 4, name: "Mejora", description: "Servicios de mejora y actualización" }
-];
+import { useAuth } from '../../context/AuthContext'; // Asegurar que use peticiones autenticadas
 
 const DataServices = () => {
-  const [service, setService] = useState([]);
+  const [services, setServices] = useState([]);
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState(''); // Para filtrar por estado
   const [page, setPage] = useState(1);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isStatusDrawerOpen, setIsStatusDrawerOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState(null);
-  const [selectedStatusService, setSelectedStatusService] = useState(null);
-  const [serviceTypes, setServiceTypes] = useState(initialServiceTypes);
-  const [statusOptions, setStatusOptions] = useState(initialStatusOptions);
-  
+  const { authenticatedRequest } = useAuth(); // Usar el hook de autenticación
+
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await fetch('/api/services');
-        if (!response.ok) throw new Error(`Status ${response.status}`);
-        const data = await response.json();
-
-        setService(data);
-      } catch (error) {
-        console.error('Error fetching services:', error);
-      }
-    };
-
+    console.log('[DataServices] Montado. Llamando a fetchServices.');
     fetchServices();
-  }, []);
-  
-  // Calculate total pages based on services length
-  const totalPages = Math.ceil(service.length / 10);
+  }, [authenticatedRequest]);
 
-  // Filtered services based on search and category
+  const fetchServices = async () => {
+    console.log('[DataServices] Iniciando fetchServices...');
+    try {
+      const response = await authenticatedRequest('/api/services');
+      const data = await response.json();
+      console.log('[DataServices] Datos de servicios recibidos:', data);
+      if (response.ok) {
+        setServices(data);
+      } else {
+        console.error('[DataServices] Error en la respuesta de la API:', data.message);
+        setServices([]);
+      }
+    } catch (error) {
+      console.error('[DataServices] Error al hacer fetch de servicios:', error);
+    }
+  };
+  
+  // Filtrado mejorado
   const filteredServices = useMemo(() => {
-    return service.filter(service => {
-      const matchesSearch = service.nameService.toLowerCase().includes(search.toLowerCase()) ||
-        service.description.toLowerCase().includes(search.toLowerCase());
+    return services.filter(service => {
+      const searchLower = search.toLowerCase();
+      // Filtrar por múltiples campos
+      const matchesSearch = 
+        service.nameService?.toLowerCase().includes(searchLower) ||
+        service.description?.toLowerCase().includes(searchLower) ||
+        (service.direccion && service.direccion.toLowerCase().includes(searchLower));
+
+      // Filtrar por categoría de estado
       const matchesCategory = !category || service.status === category;
       return matchesSearch && matchesCategory;
     });
-  }, [service, search, category]);
+  }, [services, search, category]);
 
-  // Slice logic for pagination
+  // Paginación
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(filteredServices.length / itemsPerPage);
   const slice = useMemo(() =>
-    filteredServices.slice((page - 1) * 10, page * 10),
-    [filteredServices, page]
+    filteredServices.slice((page - 1) * itemsPerPage, page * itemsPerPage),
+    [filteredServices, page, itemsPerPage]
   );
 
-  // Handler functions
-  const handleStatusClick = (service) => {
-    setSelectedStatusService(service);
-    setIsStatusDrawerOpen(true);
-  };
-
-  const handleServiceTypeClick = (service) => {
-    setSelectedService(service);
-    setIsDrawerOpen(true);
-  };
-
+  console.log(`[DataServices] Renderizando... Servicios: ${services.length}`);
 
   return (
     <div className="p-4 text-white">
@@ -80,32 +66,11 @@ const DataServices = () => {
         setSearch={setSearch}
         category={category}
         setCategory={setCategory}
-        services={service}
+        services={services} // Pasar todos los servicios para los filtros
         setPage={setPage}
       />
 
-      <ServicesTable
-        slice={slice}
-        handleStatusClick={handleStatusClick}
-        handleServiceTypeClick={handleServiceTypeClick}
-        selectedService={selectedService}
-      />
-
-      <ServiceTypeDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        tipoDeServicio={serviceTypes}
-        selectedService={selectedService}
-        setServices={setService}
-      />
-
-      <StatusDrawer
-        isOpen={isStatusDrawerOpen}
-        onClose={() => setIsStatusDrawerOpen(false)}
-        statusOptions={statusOptions}
-        selectedStatusService={selectedStatusService}
-        setServices={setService}
-      />
+      <ServicesTable slice={slice} />
 
       <Pagination
         page={page}

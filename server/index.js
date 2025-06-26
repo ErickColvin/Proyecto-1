@@ -20,11 +20,33 @@ import Reporte from './models/Reporte.js';
 import ServiceRequest from './models/ServiceRequest.js';
 import router from './HU9-Services/services.route.js';
 
+// Importar rutas de autenticación
+import authRoutes from './routes/auth.js';
+import { authenticateToken, requireRole } from './middleware/auth.js';
+
 // Cargar variables de entorno
 dotenv.config();
 
 const app = express();
-app.use(cors({ origin: "http://localhost:5173" }));
+
+// Lista de orígenes permitidos
+const allowedOrigins = [
+  "http://localhost:5173", // Puerto del frontend
+];
+
+
+app.use(cors({ 
+  origin: function (origin, callback) {
+    // Permitir peticiones sin origen (como Postman o scripts de servidor)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'La política de CORS para este sitio no permite acceso desde el origen especificado.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  } 
+}));
+
 app.use(express.json());
 
 // Usamos multer en memoria
@@ -84,6 +106,9 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
 
 app.use('/api/services', router);
 
+// Rutas de autenticación
+app.use('/api/auth', authRoutes);
+
 /** GET /api/products → lista de productos */
 app.get('/api/products', async (req, res) => {
   try {
@@ -106,19 +131,25 @@ app.get('/api/alerts', async (req, res) => {
   }
 });
 
-/** GET /api/users → lista de usuarios */
-app.get('/api/users', async (req, res) => {
+/** GET /api/users → lista de usuarios (solo admins) */
+app.get('/api/users', authenticateToken, requireRole(['admin']), async (req, res) => {
   try {
-    const users = await User.find({ activo: true }).sort({ nombre: 1 });
+    console.log('[SERVER] GET /api/users - Petición recibida');
+    console.log('[SERVER] Usuario autenticado:', req.user);
+    
+    const users = await User.find({ activo: true }).select('-contraseña').sort({ nombre: 1 });
+    console.log('[SERVER] Usuarios encontrados:', users.length);
+    console.log('[SERVER] Datos de usuarios:', users.map(u => ({ id: u._id, nombre: u.nombre, correo: u.correo, rol: u.rol })));
+    
     res.json(users);
   } catch (error) {
-    console.error('Error al obtener usuarios:', error);
+    console.error('[SERVER] Error al obtener usuarios:', error);
     res.status(500).json({ error: 'Error al obtener usuarios' });
   }
 });
 
-/** PUT /api/users/:id → actualizar usuario */
-app.put('/api/users/:id', async (req, res) => {
+/** PUT /api/users/:id → actualizar usuario (solo admins) */
+app.put('/api/users/:id', authenticateToken, requireRole(['admin']), async (req, res) => {
   try {
     const { id } = req.params;
     const { nombre, correo, rol } = req.body;
@@ -140,8 +171,8 @@ app.put('/api/users/:id', async (req, res) => {
   }
 });
 
-/** POST /api/users → crear nuevo usuario */
-app.post('/api/users', async (req, res) => {
+/** POST /api/users → crear nuevo usuario (solo admins) */
+app.post('/api/users', authenticateToken, requireRole(['admin']), async (req, res) => {
   try {
     const { nombre, correo, rol, contraseña } = req.body;
     
@@ -156,11 +187,11 @@ app.post('/api/users', async (req, res) => {
       return res.status(400).json({ error: 'El correo ya está en uso' });
     }
     
-    // Crear nuevo usuario
+    // Crear nuevo usuario (contraseña en texto plano)
     const newUser = new User({
       nombre,
       correo,
-      contraseña,
+      contraseña, // Guardar directamente
       rol,
       activo: true
     });

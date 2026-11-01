@@ -22,7 +22,7 @@ Crear archivo `.env` en la carpeta `server` con:
 
 ```env
 # Configuración de MongoDB Atlas
-MONGODB_URI=mongodb+srv://tuusuario:tupassword@tucluster.xxxxx.mongodb.net/inventario-db?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://<usuario>:<clave>@tucluster.xxxxx.mongodb.net/inventario-db?retryWrites=true&w=majority
 
 # Puerto del servidor
 PORT=3001

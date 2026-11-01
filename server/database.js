@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 
-const URI = "mongodb+srv://benjaminberrios:ds3P808U5eZhY8Kx@cluster0.4h6c4n8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+// La conexión se lee de la variable de entorno MONGODB_URI; nunca va escrita en el código
+const URI = process.env.MONGODB_URI || "mongodb://localhost:27017/DataUp"
 
 mongoose.connect(URI)
 
